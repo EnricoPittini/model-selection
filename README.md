@@ -1,2 +1,2 @@
 # model-selection
-Module for the selection of machine learning models.
+Library for the selection of machine learning models.
