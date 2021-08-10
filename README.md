@@ -59,16 +59,19 @@ train_val_scores, best_index, test_score, ax = ms.hyperparameter_validation(X, y
 
 # hyperparameters_validation                                                        
 model = DecisionTreeRegressor()
-param_grid = {"max_leaf_nodes":[2,3,4],"max_features":[None,"sqrt"]}
-params, train_val_scores, best_index, test_score = ms.hyperparameters_validation(X, y, model, param_grid, time_series=True)
+param_grid = {"max_leaf_nodes":[2,3,4], "max_features":[None,"sqrt"]}
+params, train_val_scores, best_index, test_score = ms.hyperparameters_validation(X, y, model, param_grid, 
+                                                                                time_series=True)
 
 # models_validation
 model_paramGrid_list = [ 
-                         ("DT", DecisionTreeRegressor(), {"max_leaf_nodes":[2,3,4],"max_features":[None,"sqrt"]}),
-                         ("kNN", KNeighborsRegressor(), {"n_neighbors":[1,2,3],"weights":["uniform","distance"]})
+                         ("DT", DecisionTreeRegressor(), {"max_leaf_nodes":[2,3,4],
+                                                          "max_features":[None,"sqrt"]} ),
+                         ("kNN", KNeighborsRegressor(), {"n_neighbors":[1,2,3],
+                                                         "weights":["uniform","distance"]})
                        ]
-models_train_val_score, models_best_params, best_index, test_score, ax = ms.models_validation(X, y, model_paramGrid_list,
-                                                                                       scale_list=[True,False], 
+models_train_val_score, models_best_params, best_index, test_score, ax = ms.models_validation(X, y, 
+                                                                                       model_paramGrid_list, 
                                                                                        plot=True)
                                                                                        
                                                                                        
@@ -82,24 +85,26 @@ hyperparameter_values = [2,3,4]
 (datasets_train_val_score, datasets_best_hyperparameter_value, 
  best_index, test_score, axes) = ms.datasets_hyperparameter_validation(dataset_list, model, hyperparameter, 
                                                                     hyperparameter_values, plot=True, 
-                                                                    plot_train=True, xvalues=["D1","D2","D3"])
+                                                                    xvalues=["D1","D2","D3"])
 
 # datasets_hyperparameters_validation
 model = DecisionTreeRegressor()
-param_grid = {"max_leaf_nodes":[2,3,4],"max_features":[None,"sqrt"]}
+param_grid = {"max_leaf_nodes":[2,3,4], "max_features":[None,"sqrt"]}
 (datasets_train_val_score, datasets_best_params,
  best_index, test_score, ax) = ms.datasets_hyperparameters_validation(dataset_list, model, param_grid, 
-                                                                     plot=True, plot_train=True, 
-                                                                     xvalues=["D1","D2","D3"])
+                                                                     plot=True, xvalues=["D1","D2","D3"])
                                                                                               
 # datasets_models_validation
 model_paramGrid_list = [ 
-                         ("DT", DecisionTreeRegressor(), {"max_leaf_nodes":[2,3,4],"max_features":[None,"sqrt"]}),
-                         ("kNN", KNeighborsRegressor(), {"n_neighbors":[1,2,3],"weights":["uniform","distance"]})
+                         ("DT", DecisionTreeRegressor(), {"max_leaf_nodes":[2,3,4],
+                                                          "max_features":[None,"sqrt"]}),
+                         ("kNN", KNeighborsRegressor(), {"n_neighbors":[1,2,3],
+                                                         "weights":["uniform","distance"]})
                        ]                       
 (datasets_train_val_score, datasets_best_model,
- best_index, test_score, axes) = ms.datasets_models_validation(dataset_list, model_paramGrid_list, time_series=True, 
-                                                               plot=True, plot_train=True, xvalues=["D1","D2","D3"])
+ best_index, test_score, axes) = ms.datasets_models_validation(dataset_list, model_paramGrid_list,
+                                                               time_series=True, plot=True,
+                                                               xvalues=["D1","D2","D3"])
 ```
 
 ## License
