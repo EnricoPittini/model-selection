@@ -71,8 +71,8 @@ model_paramGrid_list = [
                                                          "weights":["uniform","distance"]})
                        ]
 models_train_val_score, models_best_params, best_index, test_score, ax = ms.models_validation(X, y, 
-                                                                                       model_paramGrid_list, 
-                                                                                       plot=True)
+                                                                                     model_paramGrid_list, 
+                                                                                     plot=True)
                                                                                        
                                                                                        
 ###### Multiple datasets, in dataset_list
