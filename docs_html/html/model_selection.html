@@ -1,0 +1,1152 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>model_selection module &mdash; EEA-datasets-handler 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="model-selection" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> EEA-datasets-handler
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">model-selection</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_selection module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EEA-datasets-handler</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">model-selection</a> &raquo;</li>
+        
+      <li>model_selection module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/model_selection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-model_selection">
+<span id="model-selection-module"></span><h1>model_selection module<a class="headerlink" href="#module-model_selection" title="Permalink to this headline">¶</a></h1>
+<p>Module for the selection of machine learning models.</p>
+<p>There are several different functions which can perform the model selection: all of them have an intuitive interface, but
+are also powerful and flexible.
+In addition, almost all these functions optionally can make plots, which sum up the performed selection in a visual way.</p>
+<p>These different functions perform the model selection in different contexts, i.e. each function is specifically meant for a
+specific scenario. Certain contexts are more specific, and other are more general.
+On the whole, there are six different model selection functions, divided into two main groups:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>functions that perform the model selection with respect to a <strong>single dataset</strong>;</p></li>
+<li><p>functions that perform the model selection with respect to <strong>multiple datasets</strong>.</p></li>
+</ol>
+</div></blockquote>
+<dl class="simple">
+<dt>The six functions, sorted from the most specific context to the most general one, are:</dt><dd><ul class="simple">
+<li><p><em>hyperparameter_validation</em>, <em>hyperparameters_validation</em>, <em>models_validation</em> (single dataset);</p></li>
+<li><p><em>datasets_hyperparameter_validation</em>, <em>datasets_hyperparameters_validation</em>, <em>datasets_models_validation</em> (multiple
+datasets).</p></li>
+</ul>
+</dd>
+</dl>
+<p>This module deeply uses the <strong>numpy</strong> module. Is built on the top of it. In fact, the datasets are represented as np.array.
+In addition, is built on the top of the <strong>sklearn</strong> module:
+- the machine learning models are represented as sklearn models (i.e. sklearn estimators);
+- under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
+GridSearchCV);
+- several other operations are done using the functionalities provided by sklearn.</p>
+<p>This module, besides the model selection functions, contains also some utilities:
+- PolynomialRegression class;
+- some utility functions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="model_selection.PolynomialRegression">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">PolynomialRegression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.PolynomialRegression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
+<p>Polynomial regression model.</p>
+<p>It’s a sklearn model: it’s compliant to the sklearn estimators interface.
+<a class="reference external" href="https://scikit-learn.org/stable/developers/develop.html">Example</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>degree: int</strong></dt><dd><p>Degree to apply for the polynomial transformation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The polynomial transformation is performed using the sklearn PolynomialFeatures.</p>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_selection.PolynomialRegression.get_params" title="model_selection.PolynomialRegression.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_selection.PolynomialRegression.set_params" title="model_selection.PolynomialRegression.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**parameters)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>fit</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>predict</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="model_selection.PolynomialRegression.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.PolynomialRegression.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_selection.PolynomialRegression.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.PolynomialRegression.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_selection.PolynomialRegression.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.PolynomialRegression.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_selection.PolynomialRegression.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.PolynomialRegression.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.compute_bias_variance_error">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">compute_bias_variance_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_TESTS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.67</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.compute_bias_variance_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the bias^2-variance-error scores for the given model on the given dataset.</p>
+<p>These measures are computed in an approximately way, using <cite>N_TESTS</cite> random samples of size <cite>sample_size</cite> from the
+dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model for which computes the scores.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter scale or not the features in <cite>X</cite>.
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>N_TESTS: int</strong></dt><dd><p>Number of samples that are made to compute the measures.</p>
+</dd>
+<dt><strong>sample_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the sample.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>bias: float</dt><dd></dd>
+<dt>variance: float</dt><dd></dd>
+<dt>error: float</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.compute_train_val_test">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">compute_train_val_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.compute_train_val_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the training-validation-test scores for the given model on the given dataset.</p>
+<p>The training and test scores are computed simply splitting the dataset in the training and test sets. The validation
+score is performed applying the cross validation on the training set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model for which computes the scores.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter scale or not the features in <cite>X</cite>.
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set.</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+(This affects the computing of the scores).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the dataset.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>train_score: float</dt><dd></dd>
+<dt>val_score: float</dt><dd></dd>
+<dt>test_score: float</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the returned scores are errors, computed using MSE (i.e. Mean Squared Error).
+Otherwise, the returned scores are accuracy measures.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of the dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting the dataset in two contiguous
+parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.datasets_hyperparameter_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">datasets_hyperparameter_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets</span> <span class="pre">validation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.datasets_hyperparameter_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best dataset and the best value for the specified hyperparameter of the specified model (i.e. select the best
+couple dataset-hyperparameter value).</p>
+<p>For each dataset in <cite>dataset_list</cite>, are tested all the specified values <cite>hyperparameter_values</cite> for the specified
+<cite>hyperparameter</cite> of <cite>model</cite>.
+In other words, on each dataset is performed the tuning of <cite>hyperparameter</cite>: in fact, on each dataset, is applied the
+function <cite>hyperparameter_validation</cite>. (See <cite>hyperparameter_validation</cite>).
+At the end is selected the best couple dataset-hyperparameter value.</p>
+<p>Despite the fact that is selected a couple dataset-hyperparameter value, the main viewpoint is focused with respect to
+the datasets. It’s a validation focused on the datasets.
+In fact, first of all, for each dataset it’s performed the hyperparameter tuning: in this way is selected the best value
+and its relative score is associated to the dataset (i.e. it’s the dataset score). (In other words, on each dataset is
+applied the function <cite>hyperparameter_validation</cite>). And, after that, is selected the best dataset.
+It’s a selection on two levels.</p>
+<p>This selection is made using the validation score (i.e. the best couple dataset-hyperparameter value is the one with best
+validation score).
+The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<p>Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
+selection. This is the ‘main’ plot.
+Moreover, still optionally, can be done the ‘secondary’ plots: for each dataset, the validation scores of the
+<cite>hyperparameter_values</cite> are plotted, making a graphical visualization of the hyperparameter tuning. (As the plot of
+<cite>hyperparameter_validation</cite>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dataset_list: list</strong></dt><dd><dl class="simple">
+<dt>List of couple, where each couple is a dataset.</dt><dd><ul class="simple">
+<li><p>The first element is X, the two-dimensional np.array containing the explanatory features of the dataset.</p></li>
+<li><p>The second element is y, the mono dimensional np.array containing the response feature of the dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model which has the specified <cite>hyperparameter</cite>.</p>
+</dd>
+<dt><strong>hyperparameter: str</strong></dt><dd><p>The name of the hyperparameter that has to be validated.</p>
+</dd>
+<dt><strong>hyperparameter_values: list</strong></dt><dd><p>List of values for <cite>hyperparameter</cite> that have to be taken into account in the selection.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter to scale or not the features in ‘X’ (for all the datasets).
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given datasets are time series dataset (i.e. are indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the datasets.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+<dt><strong>plot: bool</strong></dt><dd><p>Indicates wheter to plot or not the validation score values of the datasets (i.e. ‘main’ plot).</p>
+</dd>
+<dt><strong>plot_train: bool</strong></dt><dd><p>Indicates wheter to plot also the training scores (both in the ‘main’ and ‘secondary’ plots).</p>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis of the ‘main’ plot.</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis of the ‘main’ plot.</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the ‘main’ plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the ‘main’ plot.</p>
+</dd>
+<dt><strong>verbose: bool</strong></dt><dd><p>If True, for each dataset are plotted the validation scores of the hyperparameter tuning (i.e. ‘secondary’ plots).
+(See ‘hyperparameter_validation’).</p>
+</dd>
+<dt><strong>figsize_verbose: tuple</strong></dt><dd><p>Two dimensions of the ‘secondary’ plots.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>datasets_train_val_score: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as the datasets to test, i.e. as the elements of <cite>dataset_list</cite>.</p>
+</dd>
+<dt>datasets_best_hyperparameter_value: list</dt><dd><p>List which has as many elements as the datasets (i.e. as the elements of <cite>dataset_list</cite>). For each dataset, it
+contains the best <cite>hyperparameter</cite> value on that dataset.</p>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>dataset_list</cite> that indicates which is the best dataset.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best couple dataset-hyperparameter value.</p>
+</dd>
+<dt>axes: list</dt><dd><p>List of the matplotlib Axes where are made the plots.
+Firstly, are put the ‘secondary’ plots (if any). And, as last, is put the ‘main’ plot (if any).
+If it hasn’t been made any plot, <cite>axes</cite> is an empty list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#model_selection.hyperparameter_validation" title="model_selection.hyperparameter_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hyperparameter_validation</span></code></a></dt><dd><p>select the best value for the specified hyperparameter of the specified model on the given dataset.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+couple dataset-hyperparameter value is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of each dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting each dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.datasets_hyperparameters_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">datasets_hyperparameters_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets</span> <span class="pre">validation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.datasets_hyperparameters_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best dataset and the best combination of values for the specified hyperparameters of the specified model (i.e.
+select the best couple dataset-combination of hyperparameters values).</p>
+<p>For each dataset in <cite>dataset_list</cite>, are tested all the possible combinations of the hyperparameters values (specified
+with <cite>param_grid</cite>) for <cite>model</cite>.
+In other words, on each dataset is performed the tuning of the specified hyperparameters, in an exaustive way: in fact,
+on each dataset, is applied the function <cite>hyperparameters_validation</cite>. (See <cite>hyperparameters_validation</cite>).
+At the end, is selected the best couple dataset-combination of hyperparameters values.</p>
+<p>Despite the fact that is selected a couple dataset-combination of hyperparameters values, the main viewpoint is focused
+with respect to the datasets. It’s a validation focused on the datasets.
+In fact, first of all, for each dataset it’s performed the hyperparameters tuning: in this way is selected the best
+combination of values and its relative score is associated to the dataset (i.e. it’s the dataset score). (In other words,
+on each dataset is applied the function <cite>hyperparameters_validation</cite>). And, after that, is selected the best dataset.
+It’s a selection on two levels.</p>
+<p>This selection is made using the validation score (i.e. the best couple dataset-combination of hyperparameters values, is
+the one with best validation score).
+The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<p>Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
+selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dataset_list: list</strong></dt><dd><dl class="simple">
+<dt>List of couple, where each couple is a dataset.</dt><dd><ul class="simple">
+<li><p>The first element is X, the two-dimensional np.array containing the explanatory features of the dataset.</p></li>
+<li><p>The second element is y, the mono dimensional np.array containing the response feature of the dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model which has the specified hyperparameters.</p>
+</dd>
+<dt><strong>param_grid: str</strong></dt><dd><p>Dictionary which has, as keys, the names of the specified hyperparameters and, as values, the associated list of
+values to test.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter to scale or not the features in ‘X’ (for all the datasets).
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given datasets are time series dataset (i.e. are indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the datasets.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+<dt><strong>plot: bool</strong></dt><dd><p>Indicates wheter to plot or not the validation score values of the datasets.</p>
+</dd>
+<dt><strong>plot_train: bool</strong></dt><dd><p>Indicates wheter to plot also the training scores.
+(It’s considered only if <cite>plot</cite> is True).</p>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis.</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis.</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the plot.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>datasets_train_val_score: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as the datasets to test, i.e. as the elements of <cite>dataset_list</cite>.</p>
+</dd>
+<dt>datasets_best_params: list</dt><dd><p>List which has as many elements as the datasets (i.e. as the elements of <cite>dataset_list</cite>). For each dataset, it
+contains the best combination of hyperparameters values on that dataset.
+Each combination is represented as a dictionary, with keys the hyperparameters names and values the associated
+values.</p>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>dataset_list</cite> that indicates which is the best dataset.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best couple dataset-combination of hyperparameters values.</p>
+</dd>
+<dt>ax: matplotlib.axes.Axes</dt><dd><p>The matplotlib Axes where it has been made the plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#model_selection.hyperparameters_validation" title="model_selection.hyperparameters_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hyperparameters_validation</span></code></a></dt><dd><p>select the best combination of values for the specified hyperparameters of the specified model on the given dataset.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+couple dataset-combination of hyperparameters values, is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of each dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting each dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.datasets_models_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">datasets_models_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_paramGrid_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Datasets</span> <span class="pre">validation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.datasets_models_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best dataset and the best model (i.e. select the best couple dataset-model).</p>
+<p>For each dataset in <cite>dataset_list</cite>, are tested all the model in <cite>model_paramGrid_list</cite>: each model is tested performing
+an exaustive tuning of the specified hyperparameters. In fact, <cite>model_paramGrid_list</cite> also contains, for each model, the
+grid of the hyperparameters that have to be tested on that model (i.e. the grid which contains the values to test for
+each specified hyperparameter of the model).
+In other words, on each dataset is performed the selection of the best model: in fact, on each dataset, is applied the
+function <cite>models_validation</cite>. (See <cite>models_validation</cite>).
+At the end is selected the best couple dataset-model.</p>
+<p>Despite the fact that is selected a couple dataset-model, the main viewpoint is focused with respect to the datasets.
+It’s a validation focused on the datasets.
+In fact, first of all, for each dataset it’s performed the model selection: in this way is selected the best model
+and its relative score is associated to the dataset (i.e. it’s the dataset score). (In other words, on each dataset is
+applied the function <cite>models_validation</cite>). And, after that, is selected the best dataset.
+It’s a selection on two levels.</p>
+<p>This selection is made using the validation score (i.e. the best couple dataset-model is the one with best validation
+score).
+The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<p>Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
+selection. This is the ‘main’ plot.
+Moreover, still optionally, can be done the ‘secondary’ plots: for each dataset, the validation scores of the models are
+plotted, making a graphical visualization of the models selection. (As the plot of <cite>models_validation</cite>).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>dataset_list: list</strong></dt><dd><dl class="simple">
+<dt>List of couple, where each couple is a dataset.</dt><dd><ul class="simple">
+<li><p>The first element is X, the two-dimensional np.array containing the explanatory features of the dataset.</p></li>
+<li><p>The second element is y, the mono dimensional np.array containing the response feature of the dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>model_paramGrid_list: list</strong></dt><dd><p>List that specifies the models and the grid of hyperparameters to be tested.
+It’s a list of triples (i.e. tuples), where each triple represent a model:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the first element is a string, which is a mnemonic name of that model;</p></li>
+<li><p>the second element is the sklearn model;</p></li>
+<li><p>the third element is the grid of hyperparameters to test for that model. It’s a dictionary, with the same
+structure of parameter <cite>param_grid</cite> of the function <cite>hyperparameters_validation</cite>.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>scale_list: list or bool</strong></dt><dd><p>List of booleans, which has as many elements as the models to test (i.e. as the elements of the
+<cite>model_paramGrid_list</cite> list).
+This list indicates, for each different model, if the features in ‘X’ has to be scaled or not (for all the datasets).
+<cite>scale_list</cite> can be None or False: in this case the ‘X’ features aren’t scaled for any model. <cite>scale_list</cite> can be
+True: in this case the ‘X’ features are scaled for all the models.</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given datasets are time series dataset (i.e. are indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the datasets.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+<dt><strong>plot: bool</strong></dt><dd><p>Indicates wheter to plot or not the validation score values of the datasets (i.e. ‘main’ plot).</p>
+</dd>
+<dt><strong>plot_train: bool</strong></dt><dd><p>Indicates wheter to plot also the training scores (both in the ‘main’ and ‘secondary’ plots).</p>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis of the ‘main’ plot.</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis of the ‘main’ plot.</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the ‘main’ plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the ‘main’ plot.</p>
+</dd>
+<dt><strong>verbose: bool</strong></dt><dd><p>If True, for each dataset are plotted the validation scores of the models (i.e. ‘secondary’ plots).
+(See ‘models_validation’).</p>
+</dd>
+<dt><strong>figsize_verbose: tuple</strong></dt><dd><p>Two dimensions of the ‘secondary’ plots.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>datasets_train_val_score: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as the datasets to test, i.e. as the elements of <cite>dataset_list</cite>.</p>
+</dd>
+<dt>datasets_best_model: list</dt><dd><p>List which has as many elements as the datasets (i.e. as the elements of <cite>dataset_list</cite>). For each dataset, it
+contains the best model for that dataset.
+More precisely, it is a list of triple:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the first element is the index of <cite>model_paramGrid_list</cite>, indicating the best model;</p></li>
+<li><p>the second element is the mnemonic name of the best model;</p></li>
+<li><p>the third element is the best combination of hyperparameters values on that best model (i.e. it’s a dictionary
+with keys the hyperparameters names and values their associated values).</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>dataset_list</cite> that indicates which is the best dataset.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best couple dataset-model.</p>
+</dd>
+<dt>axes: list</dt><dd><p>List of the matplotlib Axes where are made the plots.
+Firstly, are put the ‘secondary’ plots (if any). And, as last, is put the ‘main’ plot (if any).
+If it hasn’t been made any plot, <cite>axes</cite> is an empty list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#model_selection.models_validation" title="model_selection.models_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">models_validation</span></code></a></dt><dd><p>select the best model for the given dataset.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+couple dataset-model is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of each dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting each dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.hyperparameter_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">hyperparameter_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Hyperparameter</span> <span class="pre">validation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.hyperparameter_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best value for the specified hyperparameter of the specified model on the given dataset.</p>
+<p>In other words, perform the tuning of the <cite>hyperparameter</cite>, among the values in <cite>hyperparameter_values</cite>.</p>
+<p>This selection is made using the validation score (i.e. the best hyperparameter value is the one with best validation
+score).
+The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<p>Optionally, the validation scores of the <cite>hyperparameter_values</cite> can be plotted, making a graphical visualization of the
+selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model which has the specified <cite>hyperparameter</cite>.</p>
+</dd>
+<dt><strong>hyperparameter: str</strong></dt><dd><p>The name of the hyperparameter that has to be validated.</p>
+</dd>
+<dt><strong>hyperparameter_values: list</strong></dt><dd><p>List of values for <cite>hyperparameter</cite> that have to be taken into account in the selection.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter to scale or not the features in <cite>X</cite>.
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set.</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the dataset.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+<dt><strong>plot: bool</strong></dt><dd><p>Indicates wheter to plot or not the validation score values.</p>
+</dd>
+<dt><strong>plot_train: bool</strong></dt><dd><p>Indicates wheter to plot also the training scores.
+(It’s considered only if <cite>plot</cite> is True).</p>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis.</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis.</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the plot.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>train_val_scores: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as the values in <cite>hyperparameter_values</cite> (i.e. values to test).</p>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>hyperparameter_values</cite> that indicates which is the best hyperparameter value.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best hyperparameter value.</p>
+</dd>
+<dt>ax: matplotlib.axes.Axes</dt><dd><p>The matplotlib Axes where it has been made the plot.
+If <cite>plot</cite> is False, then it is None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+hyperparameter is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best hyperparameter is the one with associated the
+maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of the dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting the dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.hyperparameters_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">hyperparameters_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.hyperparameters_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best combination of values for the specified hyperparameters of the specified model on the given dataset.</p>
+<p>In other words, perform the tuning of multiple hyperparameters.
+The parameter <cite>param_grid</cite> is a dictionary that indicates which are the specified hyperparameters and what are the
+associated values to test.</p>
+<p>Are tested all the possible combinations of values, in an exaustive way (i.e. grid search).</p>
+<p>This selection is made using the validation score (i.e. the best combination of hyperparameters values is the one with
+best validation score).
+The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model which has the specified hyperparameters.</p>
+</dd>
+<dt><strong>param_grid: dict</strong></dt><dd><p>Dictionary which has, as keys, the names of the specified hyperparameters and, as values, the associated list of
+values to test.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter to scale or not the features in <cite>X</cite>.
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set.</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the dataset.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>params: list</dt><dd><p>List which enumerates all the possible combinations of hyperparameters values.
+It’s a list of dictionaries: each dictionary represents a specific combination of hyperparameters values. (It’s a
+dictionary with keys the hyperparameters names and with values the specific associated values of that combination).</p>
+</dd>
+<dt>train_val_scores: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as possible combinations of hyperparameters values.
+(It has as many rows as the elements of <cite>params</cite>).</p>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>params</cite> that indicates which is the best combination of hyperparameters values.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best combination of hyperparameters values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+combination of hyperparameters values is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best combination of hyperparameters values is the
+one with associated the maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of the dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting the dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.models_validation">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">models_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_paramGrid_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Models</span> <span class="pre">validation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.models_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best model for the given dataset.</p>
+<p>The parameter <cite>model_paramGrid_list</cite> is the list of the models to test. It also contains, for each model, the grid of
+the hyperparameters that have to be tested on that model (i.e. the grid which contains the values to test for each
+specified hyperparameter of the model).
+(That grid has the same structure of the <cite>param_grid</cite> parameter of the function <cite>hyperparameters_validation</cite>. See
+<cite>hyperparameters_validation</cite>).</p>
+<p>For each specified model, is selected the best combination of hyperparameters values in an exaustive way (i.e. grid
+search).
+Actually, it’s used the function <cite>hyperparameters_validation</cite>.
+(See <cite>hyperparameters_validation</cite>).</p>
+<p>The selection of the best model is made using the validation score (i.e. the best model is the one with best validation
+score).
+The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
+the training set.
+Additionally, are also computed the training and test scores.</p>
+<p>Optionally, the validation scores of the different models can be plotted, making a graphical visualization of the
+selection.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model_paramGrid_list: list</strong></dt><dd><p>List that specifies the models and the grid of hyperparameters to be tested.
+It’s a list of triples (i.e. tuples), where each triple represent a model:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the first element is a string, which is a mnemonic name of that model;</p></li>
+<li><p>the second element is the sklearn model;</p></li>
+<li><p>the third element is the grid of hyperparameters to test for that model. It’s a dictionary, with the same
+structure of parameter <cite>param_grid</cite> of the function <cite>hyperparameters_validation</cite>.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>scale_list: list or bool</strong></dt><dd><p>List of booleans, which has as many elements as the models to test (i.e. as the elements of the
+<cite>model_paramGrid_list</cite> list).
+This list indicates, for each different model, if the features in <cite>X</cite> has to be scaled or not.
+<cite>scale_list</cite> can be None or False: in this case the <cite>X</cite> features aren’t scaled for any model. <cite>scale_list</cite> can be
+True: in this case the <cite>X</cite> features are scaled for all the models.</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set.</p>
+</dd>
+<dt><strong>time_series: bool</strong></dt><dd><p>Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+(This affects the computing of the validation score).</p>
+</dd>
+<dt><strong>random_state: int</strong></dt><dd><p>Used in the training-test splitting of the dataset.</p>
+</dd>
+<dt><strong>n_folds: int</strong></dt><dd><p>Indicates how many folds are made in order to compute the k-fold cross validation.
+(It’s used only if <cite>time_series</cite> is False).</p>
+</dd>
+<dt><strong>regr: bool</strong></dt><dd><p>Indicates if it’s either a regression or a classification problem.</p>
+</dd>
+<dt><strong>plot: bool</strong></dt><dd><p>Indicates wheter to plot or not the validation score values.</p>
+</dd>
+<dt><strong>plot_train: bool</strong></dt><dd><p>Indicates wheter to plot also the training scores.
+(It’s considered only if <cite>plot</cite> is True).</p>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis.</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis.</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the plot.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>models_train_val_score: np.array</dt><dd><p>Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+scores.
+It has as many rows as the models to test (i.e. as the <cite>model_paramGrid_list</cite> list).</p>
+</dd>
+<dt>models_best_params: list</dt><dd><p>List which indicates, for each model, the best combination of hyperparameters values for that model.
+It has as many elements as the models to test (i.e. as the elements of the <cite>model_paramGrid_list</cite> list), and it
+contains dictionaries: each dictionary represents the best combination of hyperparameters values for the associated
+model.</p>
+</dd>
+<dt>best_index: int</dt><dd><p>Index of <cite>model_paramGrid_list</cite> that indicates which is the best model.</p>
+</dd>
+<dt>test_score: float</dt><dd><p>Test score associated to the best model.</p>
+</dd>
+<dt>ax: matplotlib.axes.Axes</dt><dd><p>The matplotlib Axes where it has been made the plot.
+If <cite>plot</cite> is False, then it is None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#model_selection.hyperparameters_validation" title="model_selection.hyperparameters_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hyperparameters_validation</span></code></a></dt><dd><p>select the best combination of values for the specified hyperparameters of the specified model on the given dataset.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If <cite>regr</cite> is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
+model is the one with associated the minimum validation score.
+Otherwise, the validation scores are accuracies: this means that the best model is the one with associated the
+maximum validation score.</p></li>
+<li><p>If <cite>time_series</cite> is False, the training-test splitting of the dataset is made randomly. In addition, the cross
+validation strategy performed is the classical k-fold cross validation: the number of folds is specified by <cite>n_folds</cite>.
+Otherwise, if <cite>time_series</cite> is True, the training-test sets are obtained simply splitting the dataset in two
+contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.plot_predictions">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">plot_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Actual</span> <span class="pre">vs</span> <span class="pre">Predicted</span> <span class="pre">values'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.plot_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the predictions made by the given model on the given dataset, versus its actual values.</p>
+<p>The dataset is split in training-test sets: the former is used to train the <cite>model</cite>, on the latter are made the
+predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X: np.array</strong></dt><dd><p>Two-dimensional np.array, containing the explanatory features of the dataset.</p>
+</dd>
+<dt><strong>y: np.array</strong></dt><dd><p>Mono dimensional np.array, containing the response feature of the dataset.</p>
+</dd>
+<dt><strong>model: sklearn.base.BaseEstimator</strong></dt><dd><p>Model used to make the predictions.</p>
+</dd>
+<dt><strong>scale: bool</strong></dt><dd><p>Indicates wheter scale or not the features in <cite>X</cite>.
+(The scaling is performed using the sklearn MinMaxScaler).</p>
+</dd>
+<dt><strong>test_size: float</strong></dt><dd><p>Decimal number between 0 and 1, which indicates the proportion of the test set.</p>
+</dd>
+<dt><strong>plot_type: int</strong></dt><dd><dl class="simple">
+<dt>Indicates the type of the plot.</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>0 -&gt; In the same plot are drawn two different curves: the first has on the x axis <cite>xvalues</cite> and on the y axis</dt><dd><p>the actual values (i.e. <cite>y</cite>); the second has on the x axis <cite>xvalues</cite> and on the y axis the computed
+predicted values.</p>
+</dd>
+</dl>
+</li>
+<li><p>1 -&gt; On the x axis are put the actual values, on the y axis the predicted ones.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>xvalues: list (in general, iterable)</strong></dt><dd><p>Values that have to be put in the x axis.
+(It’s used only if <cite>plot_type</cite> is 0).</p>
+</dd>
+<dt><strong>xlabel: str</strong></dt><dd><p>Label of the x axis.
+(It’s used only if <cite>plot_type</cite> is 0).</p>
+</dd>
+<dt><strong>title: str</strong></dt><dd><p>Title of the plot.</p>
+</dd>
+<dt><strong>figsize: tuple</strong></dt><dd><p>Two dimensions of the plot.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>matplotlib.axes.Axes</dt><dd><p>The matplotlib Axes where it has been made the plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The splitting of the datasets in training-test sets, is simply made dividing the dataset in two contigous sequences. I.e.
+is the same technique used usually when the dataset is a time series dataset.
+(This is done in order to simplify the visualization).
+For this reason, typically this function is applied on time series datasets.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_selection.split_X_y">
+<span class="sig-prename descclassname"><span class="pre">model_selection.</span></span><span class="sig-name descname"><span class="pre">split_X_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_selection.split_X_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split the given DataFrame in X and y.</p>
+<p>X is a matrix which contains the explanatory variables of <cite>df</cite>, y is a vector which contains the response variable of
+<cite>df</cite> (i.e. the variable that is the target of prediction analysis tasks).
+Optionally, the values in y can be scaled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df: pd.DataFrame</strong></dt><dd></dd>
+<dt><strong>y_col: str</strong></dt><dd><p>Indicates which is the <cite>df</cite> column that is the response feature.
+If is None, the last <cite>df</cite> column is considered.</p>
+</dd>
+<dt><strong>scale_y: bool</strong></dt><dd><p>Indicates wheter scale or not the values in y.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>X: np.array</dt><dd><p>Two-dimensional np.array, containing the explanatory features of <cite>df</cite>.</p>
+</dd>
+<dt>y: np.array</dt><dd><p>Mono dimensional np.array, containing the response feature of <cite>df</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The scaling of the values in y is performed using the sklearn MinMaxScaler.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-left" title="model-selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Enrico Pittini.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -8,23 +8,25 @@ In addition, almost all these functions optionally can make plots, which sum up 
 These different functions perform the model selection in different contexts, i.e. each function is specifically meant for a
 specific scenario. Certain contexts are more specific, and other are more general.
 On the whole, there are six different model selection functions, divided into two main groups:
-    1. functions that perform the model selection with respect to a single dataset,
-    2. functions that perform the model selection with respect to multiple datasets.
+    1. functions that perform the model selection with respect to a **single dataset**;
+    2. functions that perform the model selection with respect to **multiple datasets**.
+    
 The six functions, sorted from the most specific context to the most general one, are:
-    - hyperparameter_validation, hyperparameters_validation, models_validation (single dataset),
-    - datasets_hyperparameter_validation, datasets_hyperparameters_validation, datasets_models_validation (multiple
+    - *hyperparameter_validation*, *hyperparameters_validation*, *models_validation* (single dataset);
+    - *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
       datasets).
 
-This module deeply uses the numpy module. Is built on the top of it. In fact, the datasets are represented as np.array.
-In addition, is built on the top of the sklearn module:
-    - the machine learning models are represented as sklearn models (i.e. sklearn estimators),
-    - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
-      GridSearchCV),
-    - several other operations are done using the functionalities provided by sklearn.
+This module deeply uses the **numpy** module. Is built on the top of it. In fact, the datasets are represented as np.array.
+In addition, is built on the top of the **sklearn** module:
+- the machine learning models are represented as sklearn models (i.e. sklearn estimators);
+- under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
+GridSearchCV);
+- several other operations are done using the functionalities provided by sklearn.
 
 This module, besides the model selection functions, contains also some utilities:
-    - PolynomialRegression class;
-    - some utility functions.
+- PolynomialRegression class;
+- some utility functions.
+
 """
 
 
