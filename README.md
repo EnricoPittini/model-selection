@@ -17,7 +17,7 @@ The six functions, sorted from the most specific context to the most general one
       datasets).
 
 This library deeply uses the [numpy](https://numpy.org/) library. Is built on the top of it. In fact, the datasets are represented as np.array.
-In addition, the plots are made using [matplotlib](https://matplotlib.org/stable/index.html). Moreover, is built on the top of the [sklearn](https://scikit-learn.org/stable/index.html) module:
+In addition, the plots are made using [matplotlib](https://matplotlib.org/stable/index.html). Moreover, is built on the top of the [sklearn](https://scikit-learn.org/stable/index.html) library:
     - the machine learning models are represented as sklearn models (i.e. sklearn estimators);
     - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
       GridSearchCV);
