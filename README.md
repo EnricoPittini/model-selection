@@ -16,8 +16,8 @@ The six functions, sorted from the most specific context to the most general one
 - *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
       datasets).
 
-This library deeply uses the [numpy](https://numpy.org/) module. Is built on the top of it. In fact, the datasets are represented as np.array.
-In addition, is built on the top of the [sklearn](https://scikit-learn.org/stable/index.html) module:
+This library deeply uses the [numpy](https://numpy.org/) library. Is built on the top of it. In fact, the datasets are represented as np.array.
+In addition, the plots are made using [matplotlib](https://matplotlib.org/stable/index.html). Moreover, is built on the top of the [sklearn](https://scikit-learn.org/stable/index.html) module:
     - the machine learning models are represented as sklearn models (i.e. sklearn estimators);
     - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
       GridSearchCV);
@@ -106,6 +106,13 @@ model_paramGrid_list = [
                                                                time_series=True, plot=True,
                                                                xvalues=["D1","D2","D3"])
 ```
+
+## References
+- [numpy](https://numpy.org/), the fundamental package for scientific computing with Python.
+- [matplotlib](https://matplotlib.org/stable/index.html) is a comprehensive library for creating static, animated, and interactive visualizations in Python.
+- [pandas](https://pandas.pydata.org/) is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool,
+built on top of the Python programming language.
+- [sklearn](https://scikit-learn.org/stable/index.html), machine Learning in Python
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
