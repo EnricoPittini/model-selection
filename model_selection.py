@@ -16,8 +16,8 @@ The six functions, sorted from the most specific context to the most general one
     - *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
       datasets).
 
-This module deeply uses the **numpy** module. Is built on the top of it. In fact, the datasets are represented as np.array.
-In addition, is built on the top of the **sklearn** module:
+This module deeply uses the **numpy** library. Is built on the top of it. In fact, the datasets are represented as np.array.
+Moreover, the plots are made using the **matplotlib** library. In addition, is built on the top of the **sklearn** module:
 - the machine learning models are represented as sklearn models (i.e. sklearn estimators);
 - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
 GridSearchCV);
@@ -45,7 +45,6 @@ from sklearn.linear_model import LinearRegression
 #----------------------------------------------------------------------------------------------------------------------------
 # POLYNOMIAL REGRESSOR MODEL
 
-# TODO : spostare in un altro file
 # from sklearn.base import BaseEstimator
 # from sklearn.linear_model import LinearRegression
 # from sklearn.preprocessing import PolynomialFeatures
