@@ -10,7 +10,7 @@ specific scenario. Certain contexts are more specific, and other are more genera
 On the whole, there are six different model selection functions, divided into two main groups:
     1. functions that perform the model selection with respect to a **single dataset**;
     2. functions that perform the model selection with respect to **multiple datasets**.
-    
+
 The six functions, sorted from the most specific context to the most general one, are:
     - *hyperparameter_validation*, *hyperparameters_validation*, *models_validation* (single dataset);
     - *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
@@ -35,7 +35,7 @@ import numpy as np
 from sklearn.utils import resample
 from sklearn.model_selection import train_test_split, cross_val_score, TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import mean_squared_error, accuracy_score
-from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 
@@ -94,48 +94,6 @@ class PolynomialRegression(BaseEstimator):
 
 #----------------------------------------------------------------------------------------------------------------------------
 # UTILITY FUNCTIONS
-
-
-def split_X_y(df, y_col=None, scale_y=True):
-    """
-    Split the given DataFrame in X and y.
-
-    X is a matrix which contains the explanatory variables of `df`, y is a vector which contains the response variable of
-    `df` (i.e. the variable that is the target of prediction analysis tasks).
-    Optionally, the values in y can be scaled.
-
-    Parameters
-    ----------
-    df: pd.DataFrame
-    y_col: str
-        Indicates which is the `df` column that is the response feature.
-        If is None, the last `df` column is considered.
-    scale_y: bool
-        Indicates wheter scale or not the values in y.
-
-    Returns
-    ----------
-    X: np.array
-        Two-dimensional np.array, containing the explanatory features of `df`.
-    y: np.array
-        Mono dimensional np.array, containing the response feature of `df`.
-
-    Notes
-    ----------
-    The scaling of the values in y is performed using the sklearn MinMaxScaler.
-    """
-    if y_col is None:
-        y_col = df.columns[-1]
-
-    y = df[y_col].values # Numpy vector y
-    X = df.drop([y_col],axis=1).values # Numpy matrix X
-
-    if scale_y: # Scale the y
-        scaler=MinMaxScaler()
-        scaler.fit(y.reshape(y.shape[0],1))
-        y = scaler.transform(y.reshape(y.shape[0],1)).reshape(y.shape[0],)
-
-    return X,y
 
 
 def compute_train_val_test(X, y, model, scale=False, test_size=0.2, time_series=False, random_state=123, n_folds=5,
