@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
   name="ml-model-selection",
-  version="0.0.3",
+  version="0.0.4",
   py_modules =["model_selection"],
   description="Library for the selection of machine learning models",
   long_description=long_description,

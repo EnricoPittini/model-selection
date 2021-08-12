@@ -35,7 +35,7 @@ import numpy as np
 from sklearn.utils import resample
 from sklearn.model_selection import train_test_split, cross_val_score, TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import mean_squared_error, accuracy_score
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 
