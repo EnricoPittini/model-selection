@@ -3,7 +3,7 @@ Module for the selection of machine learning models.
 
 There are several different functions which can perform the model selection: all of them have an intuitive interface, but
 are also powerful and flexible.
-In addition, almost all these functions optionally can make plots, which sum up the performed selection in a visual way.
+In addition, almost all these functions can optionally make plots, which sum up the performed selection in a visual way.
 
 These different functions perform the model selection in different contexts, i.e. each function is specifically meant for a
 specific scenario. Certain contexts are more specific, and other are more general.
@@ -16,15 +16,15 @@ The six functions, sorted from the most specific context to the most general one
     - *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
       datasets).
 
-This module deeply uses the **numpy** library. Is built on the top of it. In fact, the datasets are represented as np.array.
-Moreover, the plots are made using the **matplotlib** library. In addition, is built on the top of the **sklearn** module:
+This module deeply uses the **numpy** library. It is built on the top of it. In fact, the datasets are represented as np.array.
+Moreover, the plots are made using the **matplotlib** library. In addition, it is built on the top of the **sklearn** module:
 - the machine learning models are represented as sklearn models (i.e. sklearn estimators);
 - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
 GridSearchCV);
 - several other operations are done using the functionalities provided by sklearn.
 
 This module, besides the model selection functions, contains also some utilities:
-- PolynomialRegression class;
+- the PolynomialRegression class;
 - some utility functions.
 
 """
@@ -44,10 +44,6 @@ from sklearn.linear_model import LinearRegression
 
 #----------------------------------------------------------------------------------------------------------------------------
 # POLYNOMIAL REGRESSOR MODEL
-
-# from sklearn.base import BaseEstimator
-# from sklearn.linear_model import LinearRegression
-# from sklearn.preprocessing import PolynomialFeatures
 
 class PolynomialRegression(BaseEstimator):
     """
@@ -101,7 +97,7 @@ def compute_train_val_test(X, y, model, scale=False, test_size=0.2, time_series=
     """
     Compute the training-validation-test scores for the given model on the given dataset.
 
-    The training and test scores are computed simply splitting the dataset in the training and test sets. The validation
+    The training and test scores are simply computed by splitting the dataset into the training and test sets. The validation
     score is performed applying the cross validation on the training set.
 
     Parameters
@@ -111,14 +107,14 @@ def compute_train_val_test(X, y, model, scale=False, test_size=0.2, time_series=
     y: np.array
         Mono dimensional np.array, containing the response feature of the dataset.
     model: sklearn.base.BaseEstimator
-        Model for which computes the scores.
+        Model to evaluate.
     scale: bool
-        Indicates wheter scale or not the features in `X`.
+        Indicates whether to scale or not the features in `X`.
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set.
     time_series: bool
-        Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+        Indicates if the given dataset is a time series dataset (i.e. datasets indexed by days).
         (This affects the computing of the scores).
     random_state: int
         Used in the training-test splitting of the dataset.
@@ -136,12 +132,12 @@ def compute_train_val_test(X, y, model, scale=False, test_size=0.2, time_series=
 
     Notes
     ----------
-    - If `regr` is True, the returned scores are errors, computed using MSE (i.e. Mean Squared Error).
+    - If `regr` is True, the returned scores are errors, computed using the MSE formula (i.e. Mean Squared Error).
       Otherwise, the returned scores are accuracy measures.
     - If `time_series` is False, the training-test splitting of the dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting the dataset in two contiguous
-      parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are obtained simply by splitting the dataset into two
+      contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
     if regr:
@@ -149,7 +145,7 @@ def compute_train_val_test(X, y, model, scale=False, test_size=0.2, time_series=
     else:
         scoring="accuracy"
 
-    # Split in training e test.
+    # Split into training e test.
     if not time_series : # Random splitting (not time series)
         X_train_80, X_test, y_train_80, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
     else: # time series splitting
@@ -194,7 +190,7 @@ def compute_bias_variance_error(X, y, model, scale=False, N_TESTS = 20, sample_s
     """
     Compute the bias^2-variance-error scores for the given model on the given dataset.
 
-    These measures are computed in an approximately way, using `N_TESTS` random samples of size `sample_size` from the
+    These measures are computed in an approximate way, using `N_TESTS` random samples of size `sample_size` from the
     dataset.
 
     Parameters
@@ -204,12 +200,12 @@ def compute_bias_variance_error(X, y, model, scale=False, N_TESTS = 20, sample_s
     y: np.array
         Mono dimensional np.array, containing the response feature of the dataset.
     model: sklearn.base.BaseEstimator
-        Model for which computes the scores.
+        Model to evaluate.
     scale: bool
-        Indicates wheter scale or not the features in `X`.
+        Indicates whether to scale or not the features in `X`.
         (The scaling is performed using the sklearn MinMaxScaler).
     N_TESTS: int
-        Number of samples that are made to compute the measures.
+        Number of samples that are made in order to compute the measures.
     sample_size: float
         Decimal number between 0 and 1, which indicates the proportion of the sample.
 
@@ -226,8 +222,9 @@ def compute_bias_variance_error(X, y, model, scale=False, N_TESTS = 20, sample_s
         scaler.fit(X)
         X = scaler.transform(X)
 
-    # Vector 'vector_ypred': at the end it will be a matrix with as many rows as `N_TESTS` (each row correspond to a sample)
-    # and as many columns as the instances in `X` (each column is a point of the dataset).
+    # Vector 'vector_ypred': at the beginning is a list of lists (i.e. two dimensional list).
+    # In the end it will be a matrix which has as many rows as `N_TESTS` (each row corresponds to a sample) and as many
+    # columns as the number of instances in `X` (each column is a point of the dataset).
     # Row 'i' --> there are the predictions made by the model on the sample 'i' using all the dataset points.
     # Column 'j' --> there are the predictions made by the model on the point 'j' using all the `N_TESTS` samples.
     vector_ypred = []
@@ -243,18 +240,18 @@ def compute_bias_variance_error(X, y, model, scale=False, N_TESTS = 20, sample_s
         # Add the predictions made by the model on all the dataset points
         vector_ypred.append(list(model.predict(X)))
 
-    vector_ypred = np.array(vector_ypred) # Transform to numpy
+    vector_ypred = np.array(vector_ypred) # Transform into numpy array
 
-    # Vector that has as many elements as the dataset points, and for each of them has the associated bias^2 computed on the
-    # `N_TEST` samples.
+    # Vector that has as many elements as the dataset points, and for each of them it has the associated bias^2 computed on
+    # the `N_TEST` samples.
     vector_bias = (y - np.mean(vector_ypred, axis=0))**2
 
-    # Vector that has as many elements as the dataset points, and for each of them has the associated variance computed on the
-    # `N_TEST` samples.
+    # Vector that has as many elements as the dataset points, and for each of them it has the associated variance computed on
+    # the `N_TEST` samples.
     vector_variance = np.var(vector_ypred, axis=0)
 
-    # Vector that has as many elements as the dataset points, and for each of them has the associated error computed on the
-    # `N_TEST` samples.
+    # Vector that has as many elements as the dataset points, and for each of them it has the associated error computed on
+    # the `N_TEST` samples.
     vector_error = np.sum((vector_ypred - y)**2, axis=0)/N_TESTS
 
     bias = np.mean(vector_bias) # Total bias^2 of the model
@@ -269,8 +266,8 @@ def plot_predictions(X, y, model, scale=False, test_size=0.2, plot_type=0, xvalu
     """
     Plot the predictions made by the given model on the given dataset, versus its actual values.
 
-    The dataset is split in training-test sets: the former is used to train the `model`, on the latter are made the
-    predictions.
+    The dataset is split into training-test sets: the former is used to train the `model`, on the latter the predictions are
+    made.
 
     Parameters
     ----------
@@ -281,16 +278,16 @@ def plot_predictions(X, y, model, scale=False, test_size=0.2, plot_type=0, xvalu
     model: sklearn.base.BaseEstimator
         Model used to make the predictions.
     scale: bool
-        Indicates wheter scale or not the features in `X`.
+        Indicates whether to scale or not the features in `X`.
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set.
     plot_type: int
         Indicates the type of the plot.
-            - 0 -> In the same plot are drawn two different curves: the first has on the x axis `xvalues` and on the y axis
+            - 0 -> In the same plot two different curves are drawn: the first has on the x axis `xvalues` and on the y axis
                    the actual values (i.e. `y`); the second has on the x axis `xvalues` and on the y axis the computed
                    predicted values.
-            - 1 -> On the x axis are put the actual values, on the y axis the predicted ones.
+            - 1 -> On the x axis the actual values are put, on the y axis the predicted ones.
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis.
         (It's used only if `plot_type` is 0).
@@ -305,13 +302,14 @@ def plot_predictions(X, y, model, scale=False, test_size=0.2, plot_type=0, xvalu
     Returns
     ----------
     matplotlib.axes.Axes
-        The matplotlib Axes where it has been made the plot.
+        The matplotlib Axes where the plot has been made.
 
     Notes
     ----------
-    The splitting of the datasets in training-test sets, is simply made dividing the dataset in two contigous sequences. I.e.
-    is the same technique used usually when the dataset is a time series dataset.
-    (This is done in order to simplify the visualization).
+    The splitting of the datasets into the training-test sets is simply made by dividing the dataset into two contiguous
+    sequences.
+    I.e. it is the same technique used usually when the dataset is a time series dataset. (This is done in order to simplify
+    the visualization).
     For this reason, typically this function is applied on time series datasets.
     """
 
@@ -366,9 +364,9 @@ def _plot_TrainVal_values(xvalues, train_val_scores, plot_train, xlabel, title, 
     train_val_scores: np.array
         Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
         scores.
-        Basically, is a list of training-validation scores.
+        Basically, it is a list of training-validation scores.
     plot_train: bool
-        Indicates wheter plot also the training scores or only the validation ones.
+        Indicates whether to plot also the training scores or to plot only the validation ones.
     xlabel: str
         Label of the x axis.
     title: str
@@ -376,12 +374,12 @@ def _plot_TrainVal_values(xvalues, train_val_scores, plot_train, xlabel, title, 
     figsize: tuple
         Two dimensions of the plot.
     bar: bool
-        Indicates wheter plot the scores using bars or points.
-        If `bar` it's True, `xvalues` must contains string (i.e. labels).
+        Indicates whether to plot the scores using bars or using points.
+        If `bar` it's True, `xvalues` must contain string (i.e. labels).
     Returns
     ----------
     matplotlib.axes.Axes
-        The matplotlib Axes where it has been made the plot.
+        The matplotlib Axes where the plot has been made.
     """
 
     fig, ax = plt.subplots(figsize=figsize)
@@ -422,13 +420,13 @@ def hyperparameter_validation(X, y, model, hyperparameter, hyperparameter_values
     """
     Select the best value for the specified hyperparameter of the specified model on the given dataset.
 
-    In other words, perform the tuning of the `hyperparameter`, among the values in `hyperparameter_values`.
+    In other words, perform the tuning of the `hyperparameter` among the values in `hyperparameter_values`.
 
-    This selection is made using the validation score (i.e. the best hyperparameter value is the one with best validation
+    This selection is made using the validation score (i.e. the best hyperparameter value is the one with the best validation
     score).
-    The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    The validation score is computed by splitting the dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Optionally, the validation scores of the `hyperparameter_values` can be plotted, making a graphical visualization of the
     selection.
@@ -446,12 +444,12 @@ def hyperparameter_validation(X, y, model, hyperparameter, hyperparameter_values
     hyperparameter_values: list
         List of values for `hyperparameter` that have to be taken into account in the selection.
     scale: bool
-        Indicates wheter to scale or not the features in `X`.
+        Indicates whether to scale or not the features in `X`.
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set.
     time_series: bool
-        Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+        Indicates if the given dataset is a time series dataset (i.e. dataset indexed by days).
         (This affects the computing of the validation score).
     random_state: int
         Used in the training-test splitting of the dataset.
@@ -461,9 +459,9 @@ def hyperparameter_validation(X, y, model, hyperparameter, hyperparameter_values
     regr: bool
         Indicates if it's either a regression or a classification problem.
     plot: bool
-        Indicates wheter to plot or not the validation score values.
+        Indicates whether to plot or not the validation score values.
     plot_train: bool
-        Indicates wheter to plot also the training scores.
+        Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis.
@@ -477,26 +475,26 @@ def hyperparameter_validation(X, y, model, hyperparameter, hyperparameter_values
     Returns
     ----------
     train_val_scores: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as the values in `hyperparameter_values` (i.e. values to test).
+        It has as many rows as the number of values in `hyperparameter_values` (i.e. number of values to be tested).
     best_index: int
         Index of `hyperparameter_values` that indicates which is the best hyperparameter value.
     test_score: float
-        Test score associated to the best hyperparameter value.
+        Test score associated with the best hyperparameter value.
     ax: matplotlib.axes.Axes
-        The matplotlib Axes where it has been made the plot.
+        The matplotlib Axes where the plot has been made.
         If `plot` is False, then it is None.
 
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      hyperparameter is the one with associated the minimum validation score.
-      Otherwise, the validation scores are accuracies: this means that the best hyperparameter is the one with associated the
-      maximum validation score.
+      hyperparameter value is the one associated with the minimum validation score.
+      Otherwise, the validation scores are accuracies: this means that the best hyperparameter value is the one associated
+      with the maximum validation score.
     - If `time_series` is False, the training-test splitting of the dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting the dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting the dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
@@ -529,13 +527,13 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
     The parameter `param_grid` is a dictionary that indicates which are the specified hyperparameters and what are the
     associated values to test.
 
-    Are tested all the possible combinations of values, in an exaustive way (i.e. grid search).
+    All the possible combinations of values are tested, in an exhaustive way (i.e. grid search).
 
     This selection is made using the validation score (i.e. the best combination of hyperparameters values is the one with
-    best validation score).
-    The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    the best validation score).
+    The validation score is computed by splitting the dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Parameters
     ----------
@@ -546,15 +544,15 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
     model: sklearn.base.BaseEstimator
         Model which has the specified hyperparameters.
     param_grid: dict
-        Dictionary which has, as keys, the names of the specified hyperparameters and, as values, the associated list of
+        Dictionary which has as keys the names of the specified hyperparameters and as values the associated list of
         values to test.
     scale: bool
-        Indicates wheter to scale or not the features in `X`.
+        Indicates whether to scale or not the features in `X`.
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set.
     time_series: bool
-        Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+        Indicates if the given dataset is a time series dataset (i.e. dataframe indexed by days).
         (This affects the computing of the validation score).
     random_state: int
         Used in the training-test splitting of the dataset.
@@ -569,26 +567,26 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
     params: list
         List which enumerates all the possible combinations of hyperparameters values.
         It's a list of dictionaries: each dictionary represents a specific combination of hyperparameters values. (It's a
-        dictionary with keys the hyperparameters names and with values the specific associated values of that combination).
+        dictionary which has as keys the hyperparameters names and as values the specific associated values of that combination).
     train_val_scores: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as possible combinations of hyperparameters values.
+        It has as many rows as the number of possible combinations of the hyperparameters values.
         (It has as many rows as the elements of `params`).
     best_index: int
         Index of `params` that indicates which is the best combination of hyperparameters values.
     test_score: float
-        Test score associated to the best combination of hyperparameters values.
+        Test score associated with the best combination of hyperparameters values.
 
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      combination of hyperparameters values is the one with associated the minimum validation score.
+      combination of hyperparameters values is the one associated with the minimum validation score.
       Otherwise, the validation scores are accuracies: this means that the best combination of hyperparameters values is the
-      one with associated the maximum validation score.
+      one associated with the maximum validation score.
     - If `time_series` is False, the training-test splitting of the dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting the dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting the dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
@@ -597,7 +595,7 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
     else:
         scoring="accuracy"
 
-    # Split in training-test sets
+    # Split into training-test sets
     if not time_series : # Random splitting
         X_train_80, X_test, y_train_80, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
     else: # Time series splitting
@@ -614,7 +612,7 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
         X_test = scaler.transform(X_test)
 
     # Cross validation strategy
-    if not time_series: # The strategy is the classical k-fold cross validation
+    if not time_series: # The strategy is the classic k-fold cross validation
         cv = n_folds
     else: # Time series cross validation strategy
         cv = TimeSeriesSplit(n_splits = n_folds)
@@ -628,7 +626,7 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
     train_scores = grid_search.cv_results_["mean_train_score"]
     # List where for all the possible combinations of hyperparameters values there is the associated validation score
     val_scores = grid_search.cv_results_["mean_test_score"]
-    # Index of `params`, correspondent to the best combination of hyperparameters values
+    # Index of `params`, corresponding to the best combination of hyperparameters values
     best_index = grid_search.best_index_
     # Model with the best combination of hyperparameters values
     best_model = grid_search.best_estimator_
@@ -638,7 +636,7 @@ def hyperparameters_validation(X, y, model, param_grid, scale=False, test_size=0
         val_scores = val_scores*(-1)
     train_val_scores = np.concatenate((train_scores.reshape(-1,1), val_scores.reshape(-1,1)), axis=1)
 
-    # Fir the best model on all the training set
+    # Fit the best model on all the training set
     best_model.fit(X_train_80,y_train_80)
 
     # Compute the test score of the best model
@@ -655,24 +653,24 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
                       n_folds=5, regr=True, plot=False, plot_train=False, xvalues=None, xlabel="Models",
                       title="Models validation", figsize=(6,6)):
     """
-    Select the best model for the given dataset.
+    Select the best model on the given dataset.
 
     The parameter `model_paramGrid_list` is the list of the models to test. It also contains, for each model, the grid of
-    the hyperparameters that have to be tested on that model (i.e. the grid which contains the values to test for each
+    hyperparameters that have to be tested on that model (i.e. the grid which contains the values to test for each
     specified hyperparameter of the model).
-    (That grid has the same structure of the `param_grid` parameter of the function `hyperparameters_validation`. See
+    (That grid has the same structure as the `param_grid` parameter of the function `hyperparameters_validation`. See
     `hyperparameters_validation`).
 
-    For each specified model, is selected the best combination of hyperparameters values in an exaustive way (i.e. grid
+    For each specified model, the best combination of hyperparameters values is selected in an exhaustive  way (i.e. grid
     search).
-    Actually, it's used the function `hyperparameters_validation`.
+    Actually, the function `hyperparameters_validation` is used.
     (See `hyperparameters_validation`).
 
-    The selection of the best model is made using the validation score (i.e. the best model is the one with best validation
-    score).
-    The validation score is computed splitting the dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    The selection of the best model is made using the validation score (i.e. the best model is the one with the best
+    validation score).
+    The validation score is computed by splitting the dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Optionally, the validation scores of the different models can be plotted, making a graphical visualization of the
     selection.
@@ -684,22 +682,22 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
     y: np.array
         Mono dimensional np.array, containing the response feature of the dataset.
     model_paramGrid_list: list
-        List that specifies the models and the grid of hyperparameters to be tested.
-        It's a list of triples (i.e. tuples), where each triple represent a model:
+        List that specifies the models and the relative grids of hyperparameters to be tested.
+        It's a list of triples (i.e. tuples), where each triple represents a model:
             - the first element is a string, which is a mnemonic name of that model;
             - the second element is the sklearn model;
             - the third element is the grid of hyperparameters to test for that model. It's a dictionary, with the same
-              structure of parameter `param_grid` of the function `hyperparameters_validation`.
+              structure of the parameter `param_grid` of the function `hyperparameters_validation`.
     scale_list: list or bool
         List of booleans, which has as many elements as the models to test (i.e. as the elements of the
         `model_paramGrid_list` list).
-        This list indicates, for each different model, if the features in `X` has to be scaled or not.
+        This list indicates, for each different model, if the features in `X` have to be scaled or not.
         `scale_list` can be None or False: in this case the `X` features aren't scaled for any model. `scale_list` can be
         True: in this case the `X` features are scaled for all the models.
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set.
     time_series: bool
-        Indicates if the given dataset is a time series dataset (i.e. is indexed by days).
+        Indicates if the given dataset is a time series dataset (i.e. dataset indexed by days).
         (This affects the computing of the validation score).
     random_state: int
         Used in the training-test splitting of the dataset.
@@ -709,9 +707,9 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
     regr: bool
         Indicates if it's either a regression or a classification problem.
     plot: bool
-        Indicates wheter to plot or not the validation score values.
+        Indicates whether to plot or not the validation score values.
     plot_train: bool
-        Indicates wheter to plot also the training scores.
+        Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis.
@@ -725,20 +723,20 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
     Returns
     ----------
     models_train_val_score: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as the models to test (i.e. as the `model_paramGrid_list` list).
+        It has as many rows as the number of models to test (i.e. number of elements in the `model_paramGrid_list` list).
     models_best_params: list
-        List which indicates, for each model, the best combination of hyperparameters values for that model.
+        List which indicates, for each model, the best combination of the hyperparameters values for that model.
         It has as many elements as the models to test (i.e. as the elements of the `model_paramGrid_list` list), and it
-        contains dictionaries: each dictionary represents the best combination of hyperparameters values for the associated
-        model.
+        contains dictionaries: each dictionary represents the best combination of the hyperparameters values for the
+        associated model.
     best_index: int
         Index of `model_paramGrid_list` that indicates which is the best model.
     test_score: float
-        Test score associated to the best model.
+        Test score associated with the best model.
     ax: matplotlib.axes.Axes
-        The matplotlib Axes where it has been made the plot.
+        The matplotlib Axes where the plot has been made.
         If `plot` is False, then it is None.
 
     See also
@@ -749,12 +747,12 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      model is the one with associated the minimum validation score.
-      Otherwise, the validation scores are accuracies: this means that the best model is the one with associated the
+      model is the one associated with the minimum validation score.
+      Otherwise, the validation scores are accuracies: this means that the best model is the one associated with the
       maximum validation score.
     - If `time_series` is False, the training-test splitting of the dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting the dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting the dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
@@ -763,13 +761,13 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
     elif scale_list is True: # `scale_list` is True
         scale_list = [True]*len(model_paramGrid_list)
 
-    # Numpy matrix (np.array) with as many rows as the models and two columns, one for the training scores and the other for
-    # the validation scores. At the beginning it a list of tuples.
+    # Numpy matrix (np.array) which has as many rows as the models and which has two columns, one for the training scores and
+    # the other for the validation scores. At the beginning it is a list of tuples.
     models_train_val_score = []
     # List which has as many elements as the models: for each model there is the dictionary of the best combination of
     # hyperparameters values.
     models_best_params = []
-    # List which has as many elements as the models: for each model there is the test score (associated at the best
+    # List which has as many elements as the models: for each model there is the test score (associated with the best
     # combination of hyperparameters values).
     models_test_score = []
 
@@ -784,11 +782,11 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
                                                                                       random_state=random_state,
                                                                                       n_folds=n_folds, regr=regr)
 
-        models_train_val_score.append(tuple(train_val_scores[best_index])) # Add row for that model
-        models_best_params.append(params[best_index]) # Add element for that model
-        models_test_score.append(test_score) # Add element for that model
+        models_train_val_score.append(tuple(train_val_scores[best_index])) # Add the row for that model
+        models_best_params.append(params[best_index]) # Add the element for that model
+        models_test_score.append(test_score) # Add the element for that model
 
-    models_train_val_score = np.array(models_train_val_score) # Transform in numpy matrix (i.e. np.array)
+    models_train_val_score = np.array(models_train_val_score) # Transform into numpy matrix (i.e. np.array)
 
     # Find the best index (i.e. the best model)
     if regr:
@@ -822,35 +820,35 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     Select the best dataset and the best value for the specified hyperparameter of the specified model (i.e. select the best
     couple dataset-hyperparameter value).
 
-    For each dataset in `dataset_list`, are tested all the specified values `hyperparameter_values` for the specified
+    For each dataset in `dataset_list`, all the specified values `hyperparameter_values` are tested for the specified
     `hyperparameter` of `model`.
-    In other words, on each dataset is performed the tuning of `hyperparameter`: in fact, on each dataset, is applied the
-    function `hyperparameter_validation`. (See `hyperparameter_validation`).
-    At the end is selected the best couple dataset-hyperparameter value.
+    In other words, on each dataset the tuning of `hyperparameter` is performed: in fact, on each dataset, the function
+    `hyperparameter_validation` is applied. (See `hyperparameter_validation`).
+    In the end, the best couple dataset-hyperparameter value is selected.
 
-    Despite the fact that is selected a couple dataset-hyperparameter value, the main viewpoint is focused with respect to
+    Despite the fact that a couple dataset-hyperparameter value is selected, the main viewpoint is focused with respect to
     the datasets. It's a validation focused on the datasets.
-    In fact, first of all, for each dataset it's performed the hyperparameter tuning: in this way is selected the best value
-    and its relative score is associated to the dataset (i.e. it's the dataset score). (In other words, on each dataset is
-    applied the function `hyperparameter_validation`). And, after that, is selected the best dataset.
-    It's a selection on two levels.
+    In fact, first of all, for each dataset the hyperparameter tuning is performed: in this way the best value is selected
+    and its relative score is associated with the dataset (i.e. it's the score of the dataset). (In other words, on each
+    dataset the function `hyperparameter_validation` is applied). Finally, after that, the best dataset is selected.
+    It's a two-levels selection.
 
-    This selection is made using the validation score (i.e. the best couple dataset-hyperparameter value is the one with best
-    validation score).
-    The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    This selection is made using the validation score (i.e. the best couple dataset-hyperparameter value is the one with the
+    best validation score).
+    The validation score is computed by splitting each dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
     selection. This is the 'main' plot.
-    Moreover, still optionally, can be done the 'secondary' plots: for each dataset, the validation scores of the
-    `hyperparameter_values` are plotted, making a graphical visualization of the hyperparameter tuning. (As the plot of
-    `hyperparameter_validation`).
+    Moreover, still optionally, the 'secondary' plots can be done: for each dataset, the validation scores of the
+    `hyperparameter_values` are plotted, making a graphical visualization of the hyperparameter tuning on that dataset.
+    (As the plot made by the `hyperparameter_validation` function).
 
     Parameters
     ----------
     dataset_list: list
-        List of couple, where each couple is a dataset.
+        List of couples, where each couple is a dataset.
             - The first element is X, the two-dimensional np.array containing the explanatory features of the dataset.
             - The second element is y, the mono dimensional np.array containing the response feature of the dataset.
     model: sklearn.base.BaseEstimator
@@ -860,13 +858,13 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     hyperparameter_values: list
         List of values for `hyperparameter` that have to be taken into account in the selection.
     scale: bool
-        Indicates wheter to scale or not the features in 'X' (for all the datasets).
+        Indicates whether to scale or not the features in 'X' (for all the datasets).
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).
     time_series: bool
-        Indicates if the given datasets are time series dataset (i.e. are indexed by days).
-        (This affects the computing of the validation score).
+        Indicates if the given datasets are time series dataset (i.e. datasets indexed by days).
+        (This affects the computing of the validation scores).
     random_state: int
         Used in the training-test splitting of the datasets.
     n_folds: int
@@ -875,9 +873,9 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     regr: bool
         Indicates if it's either a regression or a classification problem.
     plot: bool
-        Indicates wheter to plot or not the validation score values of the datasets (i.e. 'main' plot).
+        Indicates whether to plot or not the validation score values of the datasets (i.e. this is the 'main' plot).
     plot_train: bool
-        Indicates wheter to plot also the training scores (both in the 'main' and 'secondary' plots).
+        Indicates whether to plot also the training scores (both in the 'main' and 'secondary' plots).
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis of the 'main' plot.
     xlabel: str
@@ -887,7 +885,8 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     figsize: tuple
         Two dimensions of the 'main' plot.
     verbose: bool
-        If True, for each dataset are plotted the validation scores of the hyperparameter tuning (i.e. 'secondary' plots).
+        If True, for each dataset are plotted the validation scores of the hyperparameter tuning (these are the 'secondary'
+        plots).
         (See 'hyperparameter_validation').
     figsize_verbose: tuple
         Two dimensions of the 'secondary' plots.
@@ -895,20 +894,20 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     Returns
     ----------
     datasets_train_val_score: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as the datasets to test, i.e. as the elements of `dataset_list`.
+        It has as many rows as the number of datasets to test, i.e. as the number of elements in `dataset_list`.
     datasets_best_hyperparameter_value: list
-        List which has as many elements as the datasets (i.e. as the elements of `dataset_list`). For each dataset, it
-        contains the best `hyperparameter` value on that dataset.
+        List which has as many elements as the number of the datasets (i.e. as the number of elements in `dataset_list`). For
+        each dataset, it contains the best `hyperparameter` value on that dataset.
     best_index: int
         Index of `dataset_list` that indicates which is the best dataset.
     test_score: float
-        Test score associated to the best couple dataset-hyperparameter value.
+        Test score associated with the best couple dataset-hyperparameter value.
     axes: list
-        List of the matplotlib Axes where are made the plots.
-        Firstly, are put the 'secondary' plots (if any). And, as last, is put the 'main' plot (if any).
-        If it hasn't been made any plot, `axes` is an empty list.
+        List of the matplotlib Axes where the plots have been made.
+        Firstly, the 'secondary' plots are put (if any). And, as last, the 'main' plot is put (if any).
+        If no plot has been made, `axes` is an empty list.
 
     See also
     ----------
@@ -918,21 +917,21 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      couple dataset-hyperparameter value is the one with associated the minimum validation score.
-      Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+      couple dataset-hyperparameter value is the one associated with the minimum validation score.
+      Otherwise, the validation scores are accuracies: this means that the best couple is the one associated with the
       maximum validation score.
     - If `time_series` is False, the training-test splitting of each dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting each dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting each dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
-    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and as columns it has the training and validation
-    # scores. At the beginning it is a list.
+    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and it has the training and validation scores as
+    # columns. At the beginning it is a list.
     datasets_train_val_score = []
     # List which contains, for each dataset, the best hyperparameter value
     datasets_best_hyperparameter_value = []
-    # List which contains, for each dataset, its test score (associated to the best hyperparameter value)
+    # List which contains, for each dataset, its test score (associated with the best hyperparameter value)
     datasets_test_score = []
     # List of axes
     axes = []
@@ -954,7 +953,7 @@ def datasets_hyperparameter_validation(dataset_list, model, hyperparameter, hype
         if ax:
             axes.append(ax)
 
-    datasets_train_val_score = np.array(datasets_train_val_score) # Transform to numpy
+    datasets_train_val_score = np.array(datasets_train_val_score) # Transform into numpy
 
     # Find the best index, i.e. the best dataset (more precisely, the best couple dataset-hyperparameter value)
     if regr:
@@ -981,24 +980,24 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
     Select the best dataset and the best combination of values for the specified hyperparameters of the specified model (i.e.
     select the best couple dataset-combination of hyperparameters values).
 
-    For each dataset in `dataset_list`, are tested all the possible combinations of the hyperparameters values (specified
-    with `param_grid`) for `model`.
-    In other words, on each dataset is performed the tuning of the specified hyperparameters, in an exaustive way: in fact,
-    on each dataset, is applied the function `hyperparameters_validation`. (See `hyperparameters_validation`).
-    At the end, is selected the best couple dataset-combination of hyperparameters values.
+    For each dataset in `dataset_list`, all the possible combinations of the hyperparameters values for `model` (specified
+    with `param_grid`) are tested.
+    In other words, on each dataset the tuning of the specified hyperparameters is performed in an exhaustive way: in fact,
+    on each dataset, the function `hyperparameters_validation` is applied. (See `hyperparameters_validation`).
+    In the end, the best couple dataset-combination of hyperparameters values is selected.
 
-    Despite the fact that is selected a couple dataset-combination of hyperparameters values, the main viewpoint is focused
+    Despite the fact that a couple dataset-combination of hyperparameters values is selected, the main viewpoint is focused
     with respect to the datasets. It's a validation focused on the datasets.
-    In fact, first of all, for each dataset it's performed the hyperparameters tuning: in this way is selected the best
-    combination of values and its relative score is associated to the dataset (i.e. it's the dataset score). (In other words,
-    on each dataset is applied the function `hyperparameters_validation`). And, after that, is selected the best dataset.
-    It's a selection on two levels.
+    In fact, first of all, for each dataset the hyperparameters tuning is performed: in this way the best combination of
+    values is selected and its relative score is associated with the dataset (i.e. it's the score of the dataset). (In other
+    words, on each dataset the function `hyperparameters_validation` is applied). Finally, after that, the best dataset is
+    selected. It's a two-levels selection.
 
     This selection is made using the validation score (i.e. the best couple dataset-combination of hyperparameters values, is
     the one with best validation score).
-    The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    The validation score is computed by splitting each dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
     selection.
@@ -1011,16 +1010,16 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
             - The second element is y, the mono dimensional np.array containing the response feature of the dataset.
     model: sklearn.base.BaseEstimator
         Model which has the specified hyperparameters.
-    param_grid: str
-        Dictionary which has, as keys, the names of the specified hyperparameters and, as values, the associated list of
+    param_grid: dict
+        Dictionary which has as keys the names of the specified hyperparameters and as values the associated list of
         values to test.
     scale: bool
-        Indicates wheter to scale or not the features in 'X' (for all the datasets).
+        Indicates whether to scale or not the features in 'X' (for all the datasets).
         (The scaling is performed using the sklearn MinMaxScaler).
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).
     time_series: bool
-        Indicates if the given datasets are time series dataset (i.e. are indexed by days).
+        Indicates if the given datasets are time series datasets (i.e. datasets indexed by days).
         (This affects the computing of the validation score).
     random_state: int
         Used in the training-test splitting of the datasets.
@@ -1030,9 +1029,9 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
     regr: bool
         Indicates if it's either a regression or a classification problem.
     plot: bool
-        Indicates wheter to plot or not the validation score values of the datasets.
+        Indicates whether to plot or not the validation score values of the datasets.
     plot_train: bool
-        Indicates wheter to plot also the training scores.
+        Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis.
@@ -1046,20 +1045,20 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
     Returns
     ----------
     datasets_train_val_score: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as the datasets to test, i.e. as the elements of `dataset_list`.
+        It has as many rows as the number of datasets to test, i.e. as the number of elements in `dataset_list`.
     datasets_best_params: list
-        List which has as many elements as the datasets (i.e. as the elements of `dataset_list`). For each dataset, it
-        contains the best combination of hyperparameters values on that dataset.
+        List which has as many elements as the number of the datasets (i.e. as the number of elements in `dataset_list`). For
+        each dataset, it contains the best combination of hyperparameters values on that dataset.
         Each combination is represented as a dictionary, with keys the hyperparameters names and values the associated
         values.
     best_index: int
         Index of `dataset_list` that indicates which is the best dataset.
     test_score: float
-        Test score associated to the best couple dataset-combination of hyperparameters values.
+        Test score associated with the best couple dataset-combination of hyperparameters values.
     ax: matplotlib.axes.Axes
-        The matplotlib Axes where it has been made the plot.
+        The matplotlib Axes where the plot has been made.
 
     See also
     ----------
@@ -1069,17 +1068,17 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      couple dataset-combination of hyperparameters values, is the one with associated the minimum validation score.
-      Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+      couple dataset-combination of hyperparameters values is the one associated with the minimum validation score.
+      Otherwise, the validation scores are accuracies: this means that the best couple is the one associated with the
       maximum validation score.
     - If `time_series` is False, the training-test splitting of each dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting each dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting each dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
-    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and as columns it has the training and validation
-    # scores. At the beginning it is a list.
+    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and it has the training and validation scores as
+    # columns . At the beginning it is a list.
     datasets_train_val_score = []
     # List which contains, for each dataset, the best combination of hyperparameters values (i.e. a dictionary)
     datasets_best_params = []
@@ -1099,7 +1098,7 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
         datasets_best_params.append(params[best_index]) # Add the element related to that dataset
         datasets_test_score.append(test_score) # Add the row related to that dataset
 
-    datasets_train_val_score = np.array(datasets_train_val_score) # Transform to numpy
+    datasets_train_val_score = np.array(datasets_train_val_score) # Transform into numpy
 
     # Find the best index, i.e. the best dataset (more precisely, the best couple dataset-combination of hyperparameters
     # values)
@@ -1127,55 +1126,56 @@ def datasets_models_validation(dataset_list, model_paramGrid_list, scale_list=No
     """
     Select the best dataset and the best model (i.e. select the best couple dataset-model).
 
-    For each dataset in `dataset_list`, are tested all the model in `model_paramGrid_list`: each model is tested performing
-    an exaustive tuning of the specified hyperparameters. In fact, `model_paramGrid_list` also contains, for each model, the
+    For each dataset in `dataset_list`, all the models in `model_paramGrid_list` are tested: each model is tested performing
+    an exhaustive tuning of the specified hyperparameters. In fact, `model_paramGrid_list` also contains, for each model, the
     grid of the hyperparameters that have to be tested on that model (i.e. the grid which contains the values to test for
     each specified hyperparameter of the model).
-    In other words, on each dataset is performed the selection of the best model: in fact, on each dataset, is applied the
-    function `models_validation`. (See `models_validation`).
-    At the end is selected the best couple dataset-model.
+    In other words, on each dataset the selection of the best model is performed: in fact, on each dataset, the function
+    `models_validation` is applied. (See `models_validation`).
+    In the end, the best couple dataset-model is selected.
 
-    Despite the fact that is selected a couple dataset-model, the main viewpoint is focused with respect to the datasets.
+    Despite the fact that a couple dataset-model is selected, the main viewpoint is focused with respect to the datasets.
     It's a validation focused on the datasets.
-    In fact, first of all, for each dataset it's performed the model selection: in this way is selected the best model
-    and its relative score is associated to the dataset (i.e. it's the dataset score). (In other words, on each dataset is
-    applied the function `models_validation`). And, after that, is selected the best dataset.
-    It's a selection on two levels.
+    In fact, first of all, for each dataset the model selection is performed: in this way the best model is selected
+    and its relative score is associated with the dataset (i.e. it's the score of the dataset). (In other words, on each
+    dataset the function `models_validation` is applied). Finally, after that, the best dataset is selected.
+    It's a two-levels selection.
 
     This selection is made using the validation score (i.e. the best couple dataset-model is the one with best validation
     score).
-    The validation score is computed splitting each dataset in training-test sets and then applying the cross validation on
-    the training set.
-    Additionally, are also computed the training and test scores.
+    The validation score is computed by splitting each dataset into the training-test sets and then by applying the cross
+    validation on the training set.
+    Additionally, the training and test scores are also computed.
 
     Optionally, the validation scores of the datasets can be plotted, making a graphical visualization of the dataset
     selection. This is the 'main' plot.
-    Moreover, still optionally, can be done the 'secondary' plots: for each dataset, the validation scores of the models are
-    plotted, making a graphical visualization of the models selection. (As the plot of `models_validation`).
+    Moreover, still optionally, the 'secondary' plots can be done: for each dataset, the validation scores of the models are
+    plotted, making a graphical visualization of the models selection on that dataset. (As the plot made by the
+    `models_validation` function).
 
     Parameters
     ----------
     dataset_list: list
-        List of couple, where each couple is a dataset.
+        List of couples, where each couple is a dataset.
             - The first element is X, the two-dimensional np.array containing the explanatory features of the dataset.
             - The second element is y, the mono dimensional np.array containing the response feature of the dataset.
     model_paramGrid_list: list
-        List that specifies the models and the grid of hyperparameters to be tested.
-        It's a list of triples (i.e. tuples), where each triple represent a model:
+        List that specifies the models and the relative grid of hyperparameters to be tested.
+        It's a list of triples (i.e. tuples), where each triple represents a model:
             - the first element is a string, which is a mnemonic name of that model;
             - the second element is the sklearn model;
             - the third element is the grid of hyperparameters to test for that model. It's a dictionary, with the same
               structure of parameter `param_grid` of the function `hyperparameters_validation`.
     scale_list: list or bool
-        List of booleans, which has as many elements as the models to test (i.e. as the elements of the
+        List of booleans, which has as many elements as the number of models to test (i.e. number of elements in the
         `model_paramGrid_list` list).
-        This list indicates, for each different model, if the features in 'X' has to be scaled or not (for all the datasets).
+        This list indicates, for each different model, if the features in 'X' have to be scaled or not (for all the datasets).
         `scale_list` can be None or False: in this case the 'X' features aren't scaled for any model. `scale_list` can be
         True: in this case the 'X' features are scaled for all the models.
     test_size: float
         Decimal number between 0 and 1, which indicates the proportion of the test set (for each dataset).
     time_series: bool
-        Indicates if the given datasets are time series dataset (i.e. are indexed by days).
+        Indicates if the given datasets are time series dataset (i.e. datasets indexed by days).
         (This affects the computing of the validation score).
     random_state: int
         Used in the training-test splitting of the datasets.
@@ -1185,9 +1185,9 @@ def datasets_models_validation(dataset_list, model_paramGrid_list, scale_list=No
     regr: bool
         Indicates if it's either a regression or a classification problem.
     plot: bool
-        Indicates wheter to plot or not the validation score values of the datasets (i.e. 'main' plot).
+        Indicates whether to plot or not the validation score values of the datasets (i.e. this is the 'main' plot).
     plot_train: bool
-        Indicates wheter to plot also the training scores (both in the 'main' and 'secondary' plots).
+        Indicates whether to plot also the training scores (both in the 'main' and 'secondary' plots).
     xvalues: list (in general, iterable)
         Values that have to be put in the x axis of the 'main' plot.
     xlabel: str
@@ -1197,7 +1197,7 @@ def datasets_models_validation(dataset_list, model_paramGrid_list, scale_list=No
     figsize: tuple
         Two dimensions of the 'main' plot.
     verbose: bool
-        If True, for each dataset are plotted the validation scores of the models (i.e. 'secondary' plots).
+        If True, for each dataset the validation scores of the models are plotted (i.e. these are the 'secondary' plots).
         (See 'models_validation').
     figsize_verbose: tuple
         Two dimensions of the 'secondary' plots.
@@ -1205,44 +1205,44 @@ def datasets_models_validation(dataset_list, model_paramGrid_list, scale_list=No
     Returns
     ----------
     datasets_train_val_score: np.array
-        Two dimensional np.array, containing two columns: the first contains the trainining scores, the second the validation
+        Two dimensional np.array, containing two columns: the first contains the training scores, the second the validation
         scores.
-        It has as many rows as the datasets to test, i.e. as the elements of `dataset_list`.
+        It has as many rows as the number of datasets to test, i.e. as the number of elements in `dataset_list`.
     datasets_best_model: list
-        List which has as many elements as the datasets (i.e. as the elements of `dataset_list`). For each dataset, it
-        contains the best model for that dataset.
+        List which has as many elements as the number of the datasets (i.e. number of elements in `dataset_list`). For
+        each dataset, it contains the best model for that dataset.
         More precisely, it is a list of triple:
-            - the first element is the index of `model_paramGrid_list`, indicating the best model;
+            - the first element is the index of `model_paramGrid_list` which indicates the best model;
             - the second element is the mnemonic name of the best model;
             - the third element is the best combination of hyperparameters values on that best model (i.e. it's a dictionary
-              with keys the hyperparameters names and values their associated values).
+              which has as keys the hyperparameters names and as values their associated values).
     best_index: int
         Index of `dataset_list` that indicates which is the best dataset.
     test_score: float
-        Test score associated to the best couple dataset-model.
+        Test score associated with the best couple dataset-model.
     axes: list
-        List of the matplotlib Axes where are made the plots.
-        Firstly, are put the 'secondary' plots (if any). And, as last, is put the 'main' plot (if any).
-        If it hasn't been made any plot, `axes` is an empty list.
+        List of the matplotlib Axes where the plots have been made.
+        Firstly, the 'secondary' plots are put (if any). And, as last, the 'main' plot is put (if any).
+        If no plot has been made, `axes` is an empty list.
 
     See also
     ----------
-    models_validation: select the best model for the given dataset.
+    models_validation: select the best model on the given dataset.
 
     Notes
     ----------
     - If `regr` is True, the validation scores are errors (MSE, i.e. Mean Squared Errors): this means that the best
-      couple dataset-model is the one with associated the minimum validation score.
-      Otherwise, the validation scores are accuracies: this means that the best couple is the one with associated the
+      couple dataset-model is the one associated with the minimum validation score.
+      Otherwise, the validation scores are accuracies: this means that the best couple is the one associated with the
       maximum validation score.
     - If `time_series` is False, the training-test splitting of each dataset is made randomly. In addition, the cross
-      validation strategy performed is the classical k-fold cross validation: the number of folds is specified by `n_folds`.
-      Otherwise, if `time_series` is True, the training-test sets are obtained simply splitting each dataset in two
+      validation strategy performed is the classic k-fold cross validation: the number of folds is specified by `n_folds`.
+      Otherwise, if `time_series` is True, the training-test sets are simply obtained by splitting each dataset into two
       contiguous parts. In addition, the cross validation strategy performed is the sklearn TimeSeriesSplit.
     """
 
-    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and as columns it has the training and validation
-    # scores. At the beginning it is a list.
+    # numpy matrix (i.e. np.array) which has as many rows as the datasets, and it has the training and validation scores as
+    # columns. At the beginning it is a list.
     datasets_train_val_score = []
     # List which contains, for each dataset, the best model. I.e. there is the triple index-model name-best combination of
     # hyperparameters values
@@ -1278,7 +1278,7 @@ def datasets_models_validation(dataset_list, model_paramGrid_list, scale_list=No
         if ax:
             axes.append(ax)
 
-    datasets_train_val_score = np.array(datasets_train_val_score) # Transform to numpy
+    datasets_train_val_score = np.array(datasets_train_val_score) # Transform into numpy
 
     # Find the best index, i.e. the best dataset (more precisely, the best couple dataset-model)
     if regr:
