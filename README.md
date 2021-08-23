@@ -27,10 +27,11 @@ This library, besides the model selection functions, contains also some utilitie
     - the PolynomialRegression class;
     - some utility functions.
 
-This library is part of my bachelor thesis, do check it out the other works.
+This library is part of my bachelor thesis, check out the other works.
 - [timeSeries-processing](https://github.com/EnricoPittini/timeSeries-processing)
 - [EEA-datasets-handler](https://github.com/EnricoPittini/EEA-datasets-handler)
 - [ILMETEO-datasets-handler](https://github.com/EnricoPittini/ILMETEO-datasets-handler)
+- [Air-quality-prediction](https://github.com/EnricoPittini/Air-quality-prediction)
 
 ## Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install model-selection.

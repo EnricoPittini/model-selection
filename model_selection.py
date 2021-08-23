@@ -289,10 +289,10 @@ def plot_predictions(X, y, model, scale=False, test_size=0.2, plot_type=0, xvalu
                    predicted values.
             - 1 -> On the x axis the actual values are put, on the y axis the predicted ones.
     xvalues: list (in general, iterable)
-        Values that have to be put in the x axis.
+        Values that have to be put in the x axis of the plot.
         (It's used only if `plot_type` is 0).
     xlabel: str
-        Label of the x axis.
+        Label of the x axis of the plot.
         (It's used only if `plot_type` is 0).
     title: str
         Title of the plot.
@@ -464,9 +464,9 @@ def hyperparameter_validation(X, y, model, hyperparameter, hyperparameter_values
         Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
-        Values that have to be put in the x axis.
+        Values that have to be put in the x axis of the plot.
     xlabel: str
-        Label of the x axis.
+        Label of the x axis of the plot.
     title: str
         Title of the plot.
     figsize: tuple
@@ -712,9 +712,9 @@ def models_validation(X, y, model_paramGrid_list, scale_list=None, test_size=0.2
         Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
-        Values that have to be put in the x axis.
+        Values that have to be put in the x axis of the plot.
     xlabel: str
-        Label of the x axis.
+        Label of the x axis of the plot.
     title: str
         Title of the plot.
     figsize: tuple
@@ -1034,9 +1034,9 @@ def datasets_hyperparameters_validation(dataset_list, model, param_grid, scale=F
         Indicates whether to plot also the training scores.
         (It's considered only if `plot` is True).
     xvalues: list (in general, iterable)
-        Values that have to be put in the x axis.
+        Values that have to be put in the x axis of the plot.
     xlabel: str
-        Label of the x axis.
+        Label of the x axis of the plot.
     title: str
         Title of the plot.
     figsize: tuple
