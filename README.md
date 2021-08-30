@@ -1,37 +1,66 @@
 # model-selection
 Library for the selection of machine learning models.
 
-There are several different functions which can perform the model selection: all of them have an intuitive interface, but
-are also powerful and flexible.
-In addition, almost all these functions can optionally make plots, which sum up the performed selection in a visual way.
-
-These different functions perform the model selection in different contexts, i.e. each function is specifically meant for a
-specific scenario. Certain contexts are more specific, and others are more general.
-On the whole, there are six different model selection functions, divided into two main groups:
-1. functions that perform the model selection with respect to a **single dataset**;
-2. functions that perform the model selection with respect to **multiple datasets**.
-
-The six functions, sorted from the most specific context to the most general one, are:
-- *hyperparameter_validation*, *hyperparameters_validation*, *models_validation* (single dataset);
-- *datasets_hyperparameter_validation*, *datasets_hyperparameters_validation*, *datasets_models_validation* (multiple
-      datasets).
-
-This library deeply uses the [numpy](https://numpy.org/) library. It is built on the top of it. In fact, the datasets are represented as np.array.
-In addition, the plots are made using [matplotlib](https://matplotlib.org/stable/index.html). Moreover, it is built on the top of the [sklearn](https://scikit-learn.org/stable/index.html) library:
-    - the machine learning models are represented as sklearn models (i.e. sklearn estimators);
-    - under the hood, the selection is performed using the grid search cross validation provided by sklearn (i.e.
-      GridSearchCV);
-    - several other operations are done using the functionalities provided by sklearn.
-
-This library, besides the model selection functions, contains also some utilities:
-    - the PolynomialRegression class;
-    - some utility functions.
-
 This library is part of my bachelor thesis, check out the other works.
 - [timeSeries-processing](https://github.com/EnricoPittini/timeSeries-processing)
 - [EEA-datasets-handler](https://github.com/EnricoPittini/EEA-datasets-handler)
 - [ILMETEO-datasets-handler](https://github.com/EnricoPittini/ILMETEO-datasets-handler)
 - [Air-quality-prediction](https://github.com/EnricoPittini/Air-quality-prediction)
+
+## Description
+
+### Purpose
+The main purpose of this library is to perform the selection of the best machine learning model among several ones.
+In other words, the purpose is to perform the validation of different machine learning models.
+
+This library is meant to be simple and intuitive, but also rich. In this way, the user is able to personalize the model selection in a powerful and flexible way.  
+
+In addition, the library allows the user to plot the results of the validation, in order to graphically visualize the model selection.
+
+There are several different model selection functions. Each of them is specifically designed for a particular scenario. Certain contexts are more specific, and others are more general: on the whole, the vast majority of the possible scenarios are covered.
+This separation of the single model selection task into multiple functions has been made to keep the interface of the library both easy and flexible.
+
+### Functionalities
+On the whole, there are six different model selection functions, divided into two groups.
+1. In the first group there are the functions which perform the model selection with respect to a single dataset.
+2. In the second group there are the functions which perform the model selection with respect to multiple datasets.
+
+In particular, the functions in the first group are the following, sorted from the most specific to the most general.
+- hyperparameter_validation. It performs the tuning of the hyperparameter of a certain model.
+- hyperparameters_validation. It performs the tuning of some several hyperparameters of a certain model.
+- models_validation. It performs the model selection among different models.
+
+The functions in the second group are like the ones in the first group, but they perform the model selection among different datasets. This means that not only the best model is selected, but also the best dataset is selected.
+The functions in the second group are the following, sorted from the most specific to the most general.
+- datasets_hyperparameter_validation
+- datasets_hyperparameters_validation
+- datasets_models_validation
+
+This library, besides the model selection functions, contains also some other secondary functionalities.
+It contains the PolynomialRegression class, which is a machine learning model implementing the polynomial regression.
+It also contains some functions which compute the training-validation-test scores and the bias^2-variance-error for a certain model on the given dataset.
+Finally, it contains a function which is able to plot the predictions made by a certain model on the given dataset against the actual values. This is useful for graphically visualizing the goodness of a certain model.
+
+### Implementation details
+The selection of the best model is performed computing the validation scores, which means that the best model is the one associated with the best validation score.
+In particular, each dataset is split into training and test sets, and then the cross validation strategy is applied on the training set. In this way, the validation score is computed.
+Additionally, the training and test scores are also computed. These are simply additional indicators: the selection is performed considering only the validation scores.
+While the validation and training scores are computed for each model, the test score is computed only for the best one. The test score can be considered as a final measure of goodness for the best model.
+
+As described above, this library has a rich interface, in order to allow the user to personalize the model selection in a powerful and flexible way.  
+Some examples are now presented.
+- The user can specify whether the machine learning problem is a regression or a classification task. This choice influences the technique used for the selection.
+- The user can specify whether the given datasets are time-series datasets or not. This choice influences the technique used for the selection.
+- The user can specify whether the explanatory features have to be scaled or not.
+
+This library is built on top of the scikit-learn library.
+The machine learning models are indeed represented as scikit-learn models, i.e. they are compliant with the [scikit-learn estimators interface](https://scikit-learn.org/stable/developers/develop.html).
+In addition, under the hood, the selection is performed using the grid search cross validation provided by scikit-learn (i.e.  GridSearchCV);
+Moreover, several other scikit-learn utilities are used.
+
+The datasets are instead represented as NumPy arrays, i.e. they have type np.ndarray.
+
+Finally, the plots are made using the Matplotlib library.
 
 ## Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install model-selection.
